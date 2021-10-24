@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Page>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pages";
 }
 
 <h1>Index</h1>
@@ -9,9 +9,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table sorting" id="pages">
     <thead>
-        <tr>
+        <tr class="home">
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -22,19 +22,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.Title
-            </td>
-            <td>
-                @item.Slug
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr id="id_@item.Id" class="@item.Slug">
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Slug
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @{
+                        bool isHomePage = item.Slug == "home";
+                        string deleteLinkClasses = isHomePage ? "btn-link disabled" : "";
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="@deleteLinkClasses confirmDeletion">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@section Scripts{
+    <script>
+        $("table#pages tbody").sortable({
+            items: "tr:not(.home)",
+            placeholder: "ui-state-highlight",
+            update: function () {
+                let ids = $("table#pages tbody").sortable("serialize");
+                let url = "/admin/pages/reorder";
+
+                $.post(url, ids, function () { })
+            }
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿using CmsShop.Model;
+﻿using CmsShop.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,5 +15,6 @@ namespace CmsShop.Infrastructure
         }
 
         public DbSet<Page> Pages { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

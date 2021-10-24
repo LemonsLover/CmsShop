@@ -1,10 +1,11 @@
 ﻿using CmsShop.Infrastructure;
+using CmsShop.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace CmsShop.Model
+namespace CmsShop.Models
 {
     public class SeedData
     {

@@ -1,4 +1,4 @@
-using CmsShop.Model;
+using CmsShop.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
