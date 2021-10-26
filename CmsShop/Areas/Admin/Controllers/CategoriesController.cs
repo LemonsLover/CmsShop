@@ -1,4 +1,5 @@
 ﻿using CmsShop.Infrastructure;
+using CmsShop.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,67 @@ namespace CmsShop.Areas.Admin.Controllers
         }
 
         public IActionResult Create() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.Slug = category.Name.ToLower().Replace(" ", "-");
+                category.Sorting = 100;
+
+                var slug = await _context.Categories.FirstOrDefaultAsync(c => c.Slug == category.Slug);
+                if (slug != null)
+                {
+                    ModelState.AddModelError("", "The category alaready exists.");
+                    return View(category);
+                }
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+
+                TempData["Success"] = "The category has been added!";
+
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Category category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.Slug = category.Name.ToLower().Replace(" ", "-");
+
+                var slug = await _context.Categories.Where(c => c.Id != id).FirstOrDefaultAsync(c => c.Slug == category.Slug);
+
+                if (slug != null)
+                {
+                    ModelState.AddModelError("", "The category alaready exists.");
+                    return View(category);
+                }
+                _context.Categories.Update(category);
+                _context.SaveChanges();
+
+                TempData["Success"] = "The category has been edited!";
+
+                return RedirectToAction("Edit", new { id = category.Id });
+            }
+            return View(category);
+        }
 
     }
 }

@@ -76,30 +76,6 @@ namespace CmsShop.Areas.Admin.Controllers
             return View(page);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Page page)
-        {
-            if (ModelState.IsValid)
-            {
-                page.Slug = page.Id == 1 ? "home" : page.Title.ToLower().Replace(" ", "-");
-
-                var slug = await _context.Pages.Where(p => p.Id != page.Id).FirstOrDefaultAsync(p => p.Slug == page.Slug);
-
-                if (slug != null)
-                {
-                    ModelState.AddModelError("", "The page alaready exists.");
-                    return View(page);
-                }
-                _context.Pages.Update(page);
-                _context.SaveChanges();
-
-                TempData["Success"] = "The page has been edited!";
-
-                return RedirectToAction("Edit", new { id = page.Id});
-            }
-            return View(page);
-        }
 
         public async Task<IActionResult> Delete(int id)
         {
