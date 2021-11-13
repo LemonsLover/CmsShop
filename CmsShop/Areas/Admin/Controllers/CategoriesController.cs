@@ -83,10 +83,40 @@ namespace CmsShop.Areas.Admin.Controllers
 
                 TempData["Success"] = "The category has been edited!";
 
-                return RedirectToAction("Edit", new { id = category.Id });
+                return RedirectToAction("Edit", new { id });
             }
             return View(category);
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "The category has been removed!";
+                return RedirectToAction("Index");
+            }
+
+            TempData["Error"] = "The category does not exist!";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reorder(int[] id)
+        {
+            int count = 0;
+            foreach (var categoryId in id)
+            {
+                var category = await _context.Categories.FindAsync(categoryId);
+                category.Sorting = count;
+                _context.Categories.Update(category);
+                await _context.SaveChangesAsync();
+                count++;
+            }
+
+            return Ok();
+        }
     }
 }
