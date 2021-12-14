@@ -29,12 +29,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategotyId" class="control-label"></label>
-                <select asp-for="CategotyId" class ="form-control" asp-items="ViewBag.CategotyId"></select>
+                <select asp-for="CategotyId" class="form-control" asp-items="ViewBag.CategotyId">
+                    <option value="8">Choose a category</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>

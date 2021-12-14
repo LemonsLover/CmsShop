@@ -1,4 +1,5 @@
 ﻿using CmsShop.Infrastructure;
+using CmsShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace CmsShop.Areas.Admin.Controllers
             return View(await _context.Products.OrderByDescending(c => c.Name).Include(x => x.Category).ToListAsync());
         }
 
-        public IActionResult Create() 
+        public IActionResult Create()
         {
             ViewBag.CategotyId = new SelectList(_context.Categories.OrderBy(x => x.Sorting), "Id", "Name");
 
@@ -33,7 +34,7 @@ namespace CmsShop.Areas.Admin.Controllers
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Page page)
+        //public async Task<IActionResult> Create(Product product)
         //{
         //    if (ModelState.IsValid)
         //    {
