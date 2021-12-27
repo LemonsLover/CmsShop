@@ -27,7 +27,7 @@ namespace CmsShop
                 }
                 catch
                 {
-                    throw;
+                    throw new Exception("Database connection failed.");
                 }
             }
 

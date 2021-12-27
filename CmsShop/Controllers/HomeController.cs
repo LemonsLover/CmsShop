@@ -13,5 +13,10 @@ namespace CmsShop.Controllers
         {
             return View();
         }
+        
+        public ActionResult Details()
+        {
+            return View();
+        }
     }
 }

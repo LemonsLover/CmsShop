@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CmsShop.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,17 +17,23 @@ namespace CmsShop.Models
         public string Name { get; set; }
 
         public string Slug { get; set; }
-
+         
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         public string Description { get; set; }
 
-        public int CategotyId { get; set; }
+        [Display(Name = "Category")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please choose a category.")]
+        public int CategoryId { get; set; }
 
         public string Image { get; set; }
 
-        [ForeignKey("CategotyId")]
+        [ForeignKey(nameof(CategoryId))]
         public virtual Category Category { get; set; }
+
+        [NotMapped]
+        [FileExtension]
+        public IFormFile ImageUpload { get; set; }
     }
 }

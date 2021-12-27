@@ -31,16 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                item.Name
+                @item.Name
             </td>
             <td>
-                item.Price
+                @item.Price
             </td>
             <td>
-                Image
+                <img src="~/media/products/@item.Image" width="100"/>
             </td>
             <td>
-                item.Category.Name
+                @item.Category.Name
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -51,3 +51,10 @@
 }
     </tbody>
 </table>
+<div class="d-flex w-100 justify-content-center">
+    <Pagination page-count="@ViewBag.TotalPages" 
+                page-target="/Admin/Products" 
+                page-number="@ViewBag.Page" 
+                page-range="@ViewBag.PageRange">
+    </Pagination>
+</div>
