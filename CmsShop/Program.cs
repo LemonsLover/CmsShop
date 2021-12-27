@@ -25,7 +25,7 @@ namespace CmsShop
                 {
                     SeedData.Initialize(services);
                 }
-                catch
+                catch (Exception e)
                 {
                     throw new Exception("Database connection failed.");
                 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CmsShop
 {
@@ -21,9 +22,24 @@ namespace CmsShop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-
-            services.AddDbContext<ShopContext>(options => options.UseSqlServer
-                (Configuration.GetConnectionString("CmsShopContext")));
+            #if DEBUG
+                services.AddDbContext<ShopContext>(options => options.UseSqlServer
+                    (Configuration.GetConnectionString("CmsShopContext")));
+            #else
+                string connectionString = Environment.GetEnvironmentVariable("JAWSDB_URL");
+                connectionString = connectionString.Split("//")[1];
+                string user = connectionString.Split(':')[0];
+                connectionString = connectionString.Replace(user, "").Substring(1);
+                string password = connectionString.Split('@')[0];
+                connectionString = connectionString.Replace(password, "").Substring(1);
+                string server = connectionString.Split(':')[0];
+                connectionString = connectionString.Replace(server, "").Substring(1);
+                string port = connectionString.Split('/')[0];
+                string database = connectionString.Split('/')[1];
+                connectionString = $"server={server};database={database};user={user};password={password};port={port}";
+                services.AddDbContext<ShopContext>(options => options.UseMySQL
+                    (connectionString));
+            #endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,6 +12,7 @@ namespace CmsShop.Infrastructure
         public ShopContext(DbContextOptions<ShopContext> options)
             :base(options)
         {
+            Database.EnsureCreated();
         }
 
         public DbSet<Page> Pages { get; set; }
